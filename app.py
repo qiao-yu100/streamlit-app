@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 
 # 讀取 Excel 檔案
-summary_df = pd.read_excel("summary_output.xlsx")
+summary_df = pd.read_csv("summary_output.csv")
+
 
 # 顯示原始資料
 st.title("Summary Data with Scrap Wafer Input")
@@ -32,3 +33,4 @@ summary_df['Weekly NCD% prediction'] = summary_df['DPW'] * summary_df['Scrap waf
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
 st.dataframe(summary_df)
+
