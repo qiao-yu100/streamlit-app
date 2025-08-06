@@ -15,7 +15,7 @@ scrap_values = []
 
 for i in range(len(summary_df)):
     scrap = st.number_input(
-        label=f"{summary_df.at[i, 'DID']} 的 Scrap wafer",
+        label=f"{summary_df.at[i, 'DID']} Scrap wafer",
         min_value=0.0,
         value=0.0,
         step=1.0,
@@ -65,6 +65,7 @@ st.subheader("Baseline SQDR NCD% Prediction")
 
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
