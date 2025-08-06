@@ -15,7 +15,7 @@ scrap_values = []
 
 for i in range(len(summary_df)):
     scrap = st.number_input(
-        label=f"{summary_df.at[i, '產品開頭']} 的 Scrap wafer",
+        label=f"{summary_df.at[i, 'DID']} 的 Scrap wafer",
         min_value=0.0,
         value=0.0,
         step=1.0,
@@ -33,4 +33,5 @@ summary_df['Weekly NCD% prediction'] = summary_df['DPW'] * summary_df['Scrap waf
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
 st.dataframe(summary_df)
+
 
