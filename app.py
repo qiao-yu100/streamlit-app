@@ -55,7 +55,7 @@ sum_row = {
     'GOOD_WAFER': summary_df['GOOD_WAFER'].sum(),
     'CQDR_WAFER': summary_df['CQDR_WAFER'].sum(),
     'Scrap wafer': summary_df['Scrap wafer'].sum(),
-    'Weekly NCD% prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
+    'Weekly NCD prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
 }
 
 # 加入 sum row 到 DataFrame
@@ -65,6 +65,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
 st.dataframe(summary_df)
+
 
 
 
