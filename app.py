@@ -40,7 +40,7 @@ summary_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].ro
 # 計算總和
 weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 
-'Weekly NCD% prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
+'Weekly NCD prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
 
 
 # 建立 sum row
@@ -65,6 +65,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
 st.dataframe(summary_df)
+
 
 
 
