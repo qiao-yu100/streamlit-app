@@ -6,11 +6,11 @@ summary_df = pd.read_csv("summary_output.csv")
 
 
 # 顯示原始資料
-st.title("Summary Data with Scrap Wafer Input")
+st.title("Baseline SQDR NCD% Summary (Rolling 13W)")
 st.dataframe(summary_df)
 
 # 新增 Scrap wafer 輸入欄位
-st.subheader("請輸入每一列的 Scrap wafer 數量")
+st.subheader("Scarp plan")
 scrap_values = []
 
 for i in range(len(summary_df)):
@@ -61,10 +61,11 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 
 
 # 顯示更新後的資料表
-st.subheader("更新後的資料表")
+st.subheader("Baseline SQDR NCD% Prediction")
 
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
