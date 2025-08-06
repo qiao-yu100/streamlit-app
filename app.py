@@ -29,16 +29,16 @@ summary_df['Scrap wafer'] = scrap_values
 # 計算 Weekly NCD% prediction
 total_shipped_die_sum = summary_df['Total_shipped_die'].sum()/2
 
-# 計算 Weekly NCD% prediction 的原始數值（未加上 %）
-summary_df['Weekly NCD% prediction_raw'] = (
+# 計算 Weekly NCD prediction 的原始數值（未加上 %）
+summary_df['Weekly NCD prediction_raw'] = (
     summary_df['DPW'] * summary_df['Scrap wafer'] / total_shipped_die_sum
 ) * 100
 
 # 四捨五入並加上 % 字串
-summary_df['Weekly NCD% prediction'] = summary_df['Weekly NCD% prediction_raw'].round(2).astype(str) + '%'
+summary_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].round(2).astype(str) + '%'
 
 # 計算總和
-weekly_ncd_sum = summary_df['Weekly NCD% prediction_raw'].sum().round(2)
+weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 
 'Weekly NCD% prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
 
@@ -65,6 +65,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
 st.dataframe(summary_df)
+
 
 
 
