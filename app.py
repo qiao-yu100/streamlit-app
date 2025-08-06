@@ -27,7 +27,7 @@ for i in range(len(summary_df)):
 summary_df['Scrap wafer'] = scrap_values
 
 # 計算 Weekly NCD% prediction
-total_shipped_die_sum = summary_df['Total_shipped_die'].sum()/2
+total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
 
 # 計算 Weekly NCD prediction 的原始數值（未加上 %）
 summary_df['Weekly NCD prediction_raw'] = (
@@ -63,6 +63,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
 st.dataframe(summary_df)
+
 
 
 
