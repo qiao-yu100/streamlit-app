@@ -62,7 +62,12 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
-st.dataframe(summary_df)
+
+display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
+st.dataframe(display_df)
+
+
+
 
 
 
