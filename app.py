@@ -1,22 +1,34 @@
 import streamlit as st
 import pandas as pd
 
-# 初始資料
-data = {
-    'TN': ['TN1', 'TN2', 'TN3'],
-    'p': [0, 0, 0],
-    'q': [0, 0, 0]
-}
-df = pd.DataFrame(data)
+# 讀取 Excel 檔案
+summary_df = pd.read_excel("summary_output.xlsx")
 
-# 建立輸入介面
-st.title("互動式資料輸入與計算")
-st.write("請輸入每一列的 p 值，系統會自動計算 q = p * 2")
+# 顯示原始資料
+st.title("Summary Data with Scrap Wafer Input")
+st.dataframe(summary_df)
 
-for i in range(len(df)):
-    df.at[i, 'p'] = st.number_input(f"{df.at[i, 'TN']} 的 p 值", value=df.at[i, 'p'], key=f"p_{i}")
-    df.at[i, 'q'] = df.at[i, 'p'] * 2  # 這裡可以改成你想要的邏輯
+# 新增 Scrap wafer 輸入欄位
+st.subheader("請輸入每一列的 Scrap wafer 數量")
+scrap_values = []
 
-# 顯示結果
-st.subheader("計算結果")
-st.dataframe(df)
+for i in range(len(summary_df)):
+    scrap = st.number_input(
+        label=f"{summary_df.at[i, '產品開頭']} 的 Scrap wafer",
+        min_value=0.0,
+        value=0.0,
+        step=1.0,
+        key=f"scrap_{i}"
+    )
+    scrap_values.append(scrap)
+
+# 加入 Scrap wafer 欄位
+summary_df['Scrap wafer'] = scrap_values
+
+# 計算 Weekly NCD% prediction
+total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
+summary_df['Weekly NCD% prediction'] = summary_df['DPW'] * summary_df['Scrap wafer'] / total_shipped_die_sum
+
+# 顯示更新後的資料表
+st.subheader("更新後的資料表")
+st.dataframe(summary_df)
