@@ -13,7 +13,7 @@ st.dataframe(summary_df)
 st.subheader("請輸入每一列的 Scrap wafer 數量")
 scrap_values = []
 
-for i in range(len(summary_df)):
+for i in range(len(summary_df)-1):
     scrap = st.number_input(
         label=f"{summary_df.at[i, 'DID']} 的 Scrap wafer",
         min_value=0.0,
@@ -27,11 +27,12 @@ for i in range(len(summary_df)):
 summary_df['Scrap wafer'] = scrap_values
 
 # 計算 Weekly NCD% prediction
-total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
+total_shipped_die_sum = summary_df['Total_shipped_die'].sum()/2
 summary_df['Weekly NCD% prediction'] = summary_df['DPW'] * summary_df['Scrap wafer'] / total_shipped_die_sum
 
 # 顯示更新後的資料表
 st.subheader("更新後的資料表")
 st.dataframe(summary_df)
+
 
 
