@@ -70,9 +70,10 @@ sum_row = {
 summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 
 # 顯示更新後的資料表
-st.subheader("Baseline SQDR NCD% Prediction")
+st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
