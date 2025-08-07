@@ -6,7 +6,7 @@ summary_df = pd.read_csv("summary_output.csv")
 
 
 # 顯示原始資料
-st.title("Baseline SQDR NCD% Summary (Rolling 13W)")
+st.title("Baseline SQDR NCD% Summary (Rolling 5W)")
 st.dataframe(summary_df)
 
 # 新增 Scrap wafer 輸入欄位
@@ -65,6 +65,7 @@ st.subheader("Baseline SQDR NCD% Prediction")
 
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
