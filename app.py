@@ -52,6 +52,8 @@ sum_row = {
      'SQDR NCD Percent': f"{(summary_df['SQDR_DIE'].sum() / summary_df['Total_shipped_die'].sum()) * 100:.2f}%",
     'GOOD_WAFER': summary_df['GOOD_WAFER'].sum(),
     'CQDR_WAFER': summary_df['CQDR_WAFER'].sum(),
+    'SQDR_WAFER': summary_df['SQDR_WAFER'].sum(),
+    'PLANNED_QDR_WAFER': summary_df['PLANNED_QDR_WAFER'].sum(),
     'Scrap wafer': summary_df['Scrap wafer'].sum(),
     'Weekly NCD prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
 }
@@ -65,6 +67,7 @@ st.subheader("Baseline SQDR NCD% Prediction")
 
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
