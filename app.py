@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # 讀取 Excel 檔案
-summary_df = pd.read_csv("summary_output.csv")
+summary_df = pd.read_csv("summary_wip_prediction.csv")
 
 
 # 顯示原始資料
@@ -66,6 +66,7 @@ st.subheader("Baseline SQDR NCD% Prediction")
 
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
