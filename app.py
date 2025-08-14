@@ -61,6 +61,7 @@ sum_row = {
     'GOOD_WAFER': summary_df['GOOD_WAFER'].sum(),
     'CQDR_WAFER': summary_df['CQDR_WAFER'].sum(),
     'SQDR_WAFER': summary_df['SQDR_WAFER'].sum(),
+    'EVENT_QDR_WAFER': summary_df['EVENT_QDR_WAFER'].sum(),
     'PLANNED_QDR_WAFER': summary_df['PLANNED_QDR_WAFER'].sum(),
     'Scrap wafer': summary_df['Scrap wafer'].sum(),
     'Weekly NCD prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
@@ -73,6 +74,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
