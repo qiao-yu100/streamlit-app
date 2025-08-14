@@ -4,6 +4,9 @@ import pandas as pd
 # 讀取 Excel 檔案
 summary_df = pd.read_csv("summary_wip_prediction.csv")
 
+# 設定頁面標題
+st.title("Baseline SQDR NCD% Summary (Rolling 5W)")
+
 # 新增 Scrap wafer 輸入欄位
 st.subheader("Scrap plan")
 scrap_values = []
@@ -71,6 +74,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
