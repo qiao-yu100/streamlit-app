@@ -54,6 +54,7 @@ sum_row = {
     'WIP Projection': summary_df['WIP Projection'].sum(),
     'GOOD_DIE': summary_df['GOOD_DIE'].sum(),
     'CQDR_DIE': summary_df['CQDR_DIE'].sum(),
+    'EVENT_QDR_DIE': summary_df['EVENT_QDR_DIE'].sum(),
     'Total_shipped_die': summary_df['Total_shipped_die'].sum(),
     'SQDR_DIE': summary_df['PLANNED_QDR_DIE'].sum(),
     'PLANNED_QDR_DIE': summary_df['SQDR_DIE'].sum(),
@@ -74,6 +75,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
