@@ -13,7 +13,7 @@ scrap_values = []
 
 # 四欄排版
 num_cols = 4
-rows = (len(summary_df) + num_cols - 1) // num_cols  # 計算需要幾行
+rows = (len(summary_df) + num_cols - 1) // num_cols
 
 for row in range(rows):
     cols = st.columns(num_cols)
@@ -35,16 +35,10 @@ summary_df['Scrap wafer'] = scrap_values
 
 # 計算 Weekly NCD% prediction
 total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
-
-# 計算 Weekly NCD prediction 的原始數值（未加上 %）
 summary_df['Weekly NCD prediction_raw'] = (
     summary_df['DPW'] * summary_df['Scrap wafer'] / total_shipped_die_sum
 ) * 100
-
-# 四捨五入並加上 % 字串
 summary_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].round(2).astype(str) + '%'
-
-# 計算總和
 weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 
 # 建立 sum row
@@ -64,16 +58,27 @@ sum_row = {
     'EVENT_QDR_WAFER': summary_df['EVENT_QDR_WAFER'].sum(),
     'PLANNED_QDR_WAFER': summary_df['PLANNED_QDR_WAFER'].sum(),
     'Scrap wafer': summary_df['Scrap wafer'].sum(),
-    'Weekly NCD prediction': f"{weekly_ncd_sum}%"  # 加上百分比字串
+    'Weekly NCD prediction': f"{weekly_ncd_sum}%"
 }
-
-# 加入 sum row 到 DataFrame
 summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 
 # 顯示更新後的資料表
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
-st.dataframe(display_df)
+
+# 加上樣式
+def highlight_columns(x):
+    color = 'background-color: #D6EAF8'  # 淺藍色
+    df = pd.DataFrame('', index=x.index, columns=x.columns)
+    for col in ['WIP Projection', 'Scrap wafer', 'Weekly NCD prediction']:
+        if col in df.columns:
+            df[col] = color
+    return df
+
+styled_df = display_df.style.apply(highlight_columns, axis=None)
+st.write(styled_df.to_html(), unsafe_allow_html=True)
+
+
 
 
 
