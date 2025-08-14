@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import streamlit.components.v1 as components
 
 # 讀取資料
 summary_df = pd.read_csv("summary_wip_prediction.csv")
@@ -62,28 +63,32 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 
-# 建立 HTML 表格並加上樣式
-def df_to_colored_html(df, highlight_cols):
-    html = '<table style="border-collapse: collapse; width: 100%;">'
-    html += '<thead><tr>'
+# 建立 Bootstrap 表格 HTML
+def generate_bootstrap_table(df, highlight_cols):
+    table_html = """
+    https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
+    <table class="table table-bordered table-sm" style="font-size:14px;">
+        <thead class="table-dark">
+            <tr>
+    """
     for col in df.columns:
-        html += f'<th style="border:1px solid black;padding:4px;">{col}</th>'
-    html += '</tr></thead><tbody>'
+        table_html += f"<th>{col}</th>"
+    table_html += "</tr></thead><tbody>"
+
     for _, row in df.iterrows():
-        html += '<tr>'
+        table_html += "<tr>"
         for col in df.columns:
-            style = 'background-color: #D6EAF8;' if col in highlight_cols else ''
-            html += f'<td style="border:1px solid black;padding:4px;{style}">{row[col]}</td>'
-        html += '</tr>'
-    html += '</tbody></table>'
-    return html
+            style = "background-color:#D6EAF8;" if col in highlight_cols else ""
+            table_html += f"<td style='{style}'>{row[col]}</td>"
+        table_html += "</tr>"
+    table_html += "</tbody></table>"
+    return table_html
 
-# 指定要上色的欄位
 highlight_columns = ['WIP Projection', 'Scrap wafer', 'Weekly NCD prediction']
-html_table = df_to_colored_html(display_df, highlight_columns)
+html_table = generate_bootstrap_table(display_df, highlight_columns)
 
-# 顯示 HTML 表格
-st.markdown(html_table, unsafe_allow_html=True)
+# 使用 components.html 顯示表格
+components.html(html_table, height=600, scrolling=True)
 
 
 
