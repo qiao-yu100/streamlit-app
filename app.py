@@ -4,14 +4,13 @@ import pandas as pd
 # 讀取 Excel 檔案
 summary_df = pd.read_csv("summary_wip_prediction.csv")
 
-# 設定頁面標題
+# 頁面標題
 st.title("Baseline SQDR NCD% Summary (Rolling 5W)")
 
-# 新增 Scrap wafer 輸入欄位
+# Scrap wafer 輸入欄位
 st.subheader("Scrap plan")
 scrap_values = []
 
-# 四欄排版
 num_cols = 4
 rows = (len(summary_df) + num_cols - 1) // num_cols
 
@@ -30,10 +29,7 @@ for row in range(rows):
                 )
                 scrap_values.append(scrap)
 
-# 加入 Scrap wafer 欄位
 summary_df['Scrap wafer'] = scrap_values
-
-# 計算 Weekly NCD% prediction
 total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
 summary_df['Weekly NCD prediction_raw'] = (
     summary_df['DPW'] * summary_df['Scrap wafer'] / total_shipped_die_sum
@@ -41,7 +37,6 @@ summary_df['Weekly NCD prediction_raw'] = (
 summary_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].round(2).astype(str) + '%'
 weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 
-# 建立 sum row
 sum_row = {
     'DID': 'sum',
     'WIP Projection': summary_df['WIP Projection'].sum(),
@@ -62,21 +57,29 @@ sum_row = {
 }
 summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 
-# 顯示更新後的資料表
+# 顯示資料表
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 
-# 加上樣式
-def highlight_columns(x):
-    color = 'background-color: #D6EAF8'  # 淺藍色
-    df = pd.DataFrame('', index=x.index, columns=x.columns)
-    for col in ['WIP Projection', 'Scrap wafer', 'Weekly NCD prediction']:
-        if col in df.columns:
-            df[col] = color
-    return df
+# 建立 HTML 表格並加上樣式
+def df_to_colored_html(df, highlight_cols):
+    html = '<table style="border-collapse: collapse; width: 100%;">'
+    html += '<thead><tr>'
+    for col in df.columns:
+        html += f'<th style="border: 1px solid black; padding: 4px;">{col}</th>'
+    html += '</tr></thead><tbody>'
+    for _, row in df.iterrows():
+        html += '<tr>'
+        for col in df.columns:
+            style = 'background-color: #D6EAF8;' if col in highlight_cols else ''
+            html += f'<td style="border: 1px solid black; padding: 4px; {style}">{row[col]}</td>'
+        html += '</tr>'
+    html += '</tbody></table>'
+    return html
 
-styled_df = display_df.style.apply(highlight_columns, axis=None)
-st.write(styled_df.to_html(), unsafe_allow_html=True)
+highlight_columns = ['WIP Projection', 'Scrap wafer', 'Weekly NCD prediction']
+html_table = df_to_colored_html(display_df, highlight_columns)
+st.markdown(html_table, unsafe_allow_html=True)
 
 
 
