@@ -1,20 +1,17 @@
 import streamlit as st
 import pandas as pd
+from streamlit.components.v1 import html
 
 # 讀取 CSV 檔案
-try:
-    summary_df = pd.read_csv("summary_wip_prediction.csv")
-except Exception:
-    st.error("找不到 summary_wip_prediction.csv，請確認檔案是否存在於目錄中。")
-    st.stop()
+summary_df = pd.read_csv("summary_wip_prediction.csv")
 
 # 頁面標題
+st.set_page_config(page_title="Bootstrap 表格展示", layout="centered")
 st.title("Baseline SQDR NCD% Summary (Rolling 5W)")
 
 # Scrap wafer 輸入欄位
 st.subheader("Scrap plan")
 scrap_values = []
-
 num_cols = 4
 rows = (len(summary_df) + num_cols - 1) // num_cols
 
@@ -33,10 +30,7 @@ for row in range(rows):
                 )
                 scrap_values.append(scrap)
 
-# 加入 Scrap wafer 欄位
 summary_df['Scrap wafer'] = scrap_values
-
-# 計算 Weekly NCD prediction
 total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
 summary_df['Weekly NCD prediction_raw'] = (
     summary_df['DPW'] * summary_df['Scrap wafer'] / total_shipped_die_sum
@@ -44,7 +38,7 @@ summary_df['Weekly NCD prediction_raw'] = (
 summary_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].round(2).astype(str) + '%'
 weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 
-# 建立 sum row
+# 加入 sum row
 sum_row = {
     'DID': 'sum',
     'WIP Projection': summary_df['WIP Projection'].sum(),
@@ -69,30 +63,35 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 
-# 建立 HTML 表格並加上背景色
-def df_to_colored_html(df, highlight_cols):
-    html = '<table style="border-collapse: collapse; width: 100%;">'
-    html += '<thead><tr>'
-    for col in df.columns:
-        html += f'<th style="border:1px solid black;padding:4px;">{col}</th>'
-    html += '</tr></thead><tbody>'
-    for _, row in df.iterrows():
-        html += '<tr>'
-        for col in df.columns:
-            style = 'background-color: #D6EAF8;' if col in highlight_cols else ''
-            html += f'<td style="border:1px solid black;padding:4px;{style}">{row[col]}</td>'
-        html += '</tr>'
-    html += '</tbody></table>'
-    return html
+# 建立 Bootstrap 表格 HTML，並加上指定欄位背景色
+def draw_table(df, highlight_cols, table_height=600):
+    columns = df.columns
+    header_html = "<thead><tr>" + "".join(
+        f"<th scope='col'>{col}</th>" for col in columns
+    ) + "</tr></thead>"
+
+    body_html = ""
+    for i in range(df.shape[0]):
+        row_html = "<tr>"
+        for col in columns:
+            value = df.iloc[i][col]
+            style = "background-color:#D6EAF8;" if col in highlight_cols else ""
+            row_html += f"<td style='{style}'>{value}</td>"
+        row_html += "</tr>"
+        body_html += row_html
+
+    table_html = f"""
+    https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
+    <table class="table table-bordered table-sm text-center">
+        {header_html}
+        <tbody>{body_html}</tbody>
+    </table>
+    """
+    html(table_html, height=table_height, scrolling=True)
 
 # 指定要加背景色的欄位
 highlight_columns = ['WIP Projection', 'Scrap wafer', 'Weekly NCD prediction']
-html_table = df_to_colored_html(display_df, highlight_columns)
-
-# 顯示 HTML 表格
-st.markdown(html_table, unsafe_allow_html=True)
-
-
+draw_table(display_df, highlight_columns)
 
 
 
