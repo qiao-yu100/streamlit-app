@@ -7,28 +7,54 @@ summary_df = pd.read_csv("summary_wip_prediction.csv")
 # 設定頁面標題
 st.title("Baseline SQDR NCD% Summary (Rolling 5W)")
 
-# 新增 Scrap wafer 輸入欄位
 st.subheader("Scrap plan")
 scrap_values = []
 
-# 四欄排版
-num_cols = 4
-rows = (len(summary_df) + num_cols - 1) // num_cols  # 計算需要幾行
+# 定義分類標題
+category_titles = {
+    "110s": "1",
+    "120s": "2",
+    "130s": "3",
+    "140s": "4",
+    "150s": "5",
+    "160s": "6",
+}
 
-for row in range(rows):
-    cols = st.columns(num_cols)
-    for col in range(num_cols):
-        i = row * num_cols + col
-        if i < len(summary_df):
-            with cols[col]:
-                scrap = st.number_input(
-                    label=f"{summary_df.at[i, 'DID']} Scrap wafer",
-                    min_value=0.0,
-                    value=0.0,
-                    step=1.0,
-                    key=f"scrap_{i}"
-                )
-                scrap_values.append(scrap)
+# 建立分類容器
+categorized_data = {title: [] for title in category_titles}
+
+# 將 summary_df 按照 DID 第二個字母分類
+for i in range(len(summary_df)):
+    did = str(summary_df.at[i, 'DID'])
+    if len(did) >= 2:
+        second_char = did[1]
+        for title, key_char in category_titles.items():
+            if second_char == key_char:
+                categorized_data[title].append(i)
+                break
+
+# 顯示每個分類的小標題與輸入欄位
+num_cols = 4
+for title, indices in categorized_data.items():
+    if indices:
+        st.markdown(f"### {title}")
+        rows = (len(indices) + num_cols - 1) // num_cols
+        for row in range(rows):
+            cols = st.columns(num_cols)
+            for col in range(num_cols):
+                idx = row * num_cols + col
+                if idx < len(indices):
+                    i = indices[idx]
+                    with cols[col]:
+                        scrap = st.number_input(
+                            label=f"{summary_df.at[i, 'DID']} Scrap wafer",
+                            min_value=0.0,
+                            value=0.0,
+                            step=1.0,
+                            key=f"scrap_{i}"
+                        )
+                        scrap_values.append(scrap)
+
 
 # 加入 Scrap wafer 欄位
 summary_df['Scrap wafer'] = scrap_values
@@ -74,6 +100,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
