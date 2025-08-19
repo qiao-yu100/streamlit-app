@@ -61,7 +61,7 @@ summary_df['Scrap wafer'] = scrap_values
 
 
 # 新增中間的 DataFrame
-new_df = summary_df[['DID', 'MPDW', 'DPW', 'CPW', 'Scrap wafer']].copy()
+new_df = summary_df[['DID', 'MDPW', 'DPW', 'CPW', 'Scrap wafer']].copy()
 new_df['Concentration Factor'] = 0.65
 
 # 計算 Weekly NCD% prediction
@@ -100,7 +100,7 @@ new_df_display['Weekly CoNC prediction'] = '$' + new_df['Weekly CoNC prediction 
 # 建立總和列
 sum_row = {
     'DID': 'sum',
-    'MPDW': '',
+    'MDPW': '',
     'DPW': '',
     'CPW': '',
     'Concentration Factor': '',
@@ -144,6 +144,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw','Scrap wafer'])
 st.dataframe(display_df)
+
 
 
 
