@@ -80,7 +80,7 @@ weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 
 # 計算 Weekly CoNC prediction
 new_df['Weekly CoNC prediction'] = new_df['Scrap wafer'] * new_df['CPW'] * new_df['Concentration Factor']
-new_df['Weekly CoNC prediction'] = new_df['Weekly CoNC prediction'].round(2).astype(str) + '%'
+new_df['Weekly CoNC prediction'] =  '$' + new_df['Weekly CoNC prediction'].round(2).astype(str) 
 
 # 計算預測值（保留原始數值以便加總）
 total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
@@ -144,6 +144,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw','Scrap wafer'])
 st.dataframe(display_df)
+
 
 
 
