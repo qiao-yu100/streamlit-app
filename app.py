@@ -5,7 +5,7 @@ import pandas as pd
 summary_df = pd.read_csv("summary_wip_prediction.csv")
 
 # 設定頁面標題
-st.title("Baseline SQDR NCD% Summary (Rolling 5W)")
+st.title("Baseline SQDR Calculator")
 
 st.subheader("Scrap plan")
 scrap_values = []
@@ -59,6 +59,11 @@ for title, indices in categorized_data.items():
 # 加入 Scrap wafer 欄位
 summary_df['Scrap wafer'] = scrap_values
 
+
+# 新增中間的 DataFrame
+new_df = summary_df[['DID', 'MPDW', 'DPW', 'CPW', 'Scrap wafer']].copy()
+new_df['Concentration Factor'] = 0.65
+
 # 計算 Weekly NCD% prediction
 total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
 
@@ -72,6 +77,12 @@ summary_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].ro
 
 # 計算總和
 weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
+
+# 計算 Weekly CoNC prediction
+new_df['Weekly CoNC prediction'] = new_df['Scrap wafer'] * new_df['CPW'] * new_df['Concentration Factor']
+
+# 顯示中間的 DataFrame
+st.dataframe(new_df[['DID', 'MPDW', 'DPW', 'CPW', 'Concentration Factor', 'Scrap wafer', 'Weekly NCD prediction', 'Weekly CoNC prediction']])
 
 # 建立 sum row
 sum_row = {
@@ -96,10 +107,13 @@ sum_row = {
 # 加入 sum row 到 DataFrame
 summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 
+
+
 # 顯示更新後的資料表
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
