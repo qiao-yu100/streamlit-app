@@ -73,7 +73,7 @@ summary_df['Weekly NCD prediction_raw'] = (
 ) * 100
 
 # 四捨五入並加上 % 字串
-summary_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].round(2).astype(str) + '%'
+new_df['Weekly NCD prediction'] = summary_df['Weekly NCD prediction_raw'].round(2).astype(str) + '%'
 
 # 計算總和
 weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
@@ -113,6 +113,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
