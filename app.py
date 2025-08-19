@@ -114,7 +114,7 @@ new_df_display = pd.concat([new_df_display, pd.DataFrame([sum_row])], ignore_ind
 
 # 顯示中間的 DataFrame
 st.subheader("Weekly NCD/CoNC Prediction")
-st.dataframe(new_df_display[['DID', 'MPDW', 'DPW', 'CPW', 'Concentration Factor', 'Scrap wafer', 'Weekly NCD prediction', 'Weekly CoNC prediction']])
+st.dataframe(new_df_display[['DID', 'MDPW', 'DPW', 'CPW', 'Concentration Factor', 'Scrap wafer', 'Weekly NCD prediction', 'Weekly CoNC prediction']])
 
 
 # 建立 sum row
@@ -144,6 +144,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw','Scrap wafer'])
 st.dataframe(display_df)
+
 
 
 
