@@ -106,7 +106,7 @@ sum_row = {
     'Concentration Factor': '',
     'Scrap wafer': new_df['Scrap wafer'].sum(),
     'Weekly NCD prediction': f"{new_df['Weekly NCD prediction numeric'].sum():.2f}%",
-    'Weekly CoNC prediction': f"{new_df['Weekly CoNC prediction numeric'].sum():.2f}%"
+    'Weekly CoNC prediction': f"${new_df['Weekly CoNC prediction numeric'].sum():.2f}"
 }
 
 # 加入總和列
@@ -144,6 +144,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw','Scrap wafer'])
 st.dataframe(display_df)
+
 
 
 
