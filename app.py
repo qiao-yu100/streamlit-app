@@ -82,9 +82,35 @@ weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 new_df['Weekly CoNC prediction'] = new_df['Scrap wafer'] * new_df['CPW'] * new_df['Concentration Factor']
 new_df['Weekly CoNC prediction'] = new_df['Weekly CoNC prediction'].round(2).astype(str) + '%'
 
+# 計算預測值（保留原始數值以便加總）
+total_shipped_die_sum = summary_df['Total_shipped_die'].sum()
+new_df['Weekly NCD prediction numeric'] = (
+    summary_df['DPW'] * summary_df['Scrap wafer'] / total_shipped_die_sum * 100
+)
+new_df['Weekly CoNC prediction numeric'] = (
+    new_df['Scrap wafer'] * new_df['CPW'] * new_df['Concentration Factor']
+)
+
 # 建立顯示用的 DataFrame（CPW 顯示為整數）
 new_df_display = new_df.copy()
 new_df_display['CPW'] = new_df_display['CPW'].round().astype(int)
+new_df_display['Weekly NCD prediction'] = new_df['Weekly NCD prediction numeric'].round(2).astype(str) + '%'
+new_df_display['Weekly CoNC prediction'] = new_df['Weekly CoNC prediction numeric'].round(2).astype(str) + '%'
+
+# 建立總和列
+sum_row = {
+    'DID': 'sum',
+    'MPDW': '',
+    'DPW': '',
+    'CPW': '',
+    'Concentration Factor': '',
+    'Scrap wafer': new_df['Scrap wafer'].sum(),
+    'Weekly NCD prediction': f"{new_df['Weekly NCD prediction numeric'].sum():.2f}%",
+    'Weekly CoNC prediction': f"{new_df['Weekly CoNC prediction numeric'].sum():.2f}%"
+}
+
+# 加入總和列
+new_df_display = pd.concat([new_df_display, pd.DataFrame([sum_row])], ignore_index=True)
 
 # 顯示中間的 DataFrame
 st.subheader("Weekly NCD/CoNC Prediction")
@@ -120,6 +146,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
