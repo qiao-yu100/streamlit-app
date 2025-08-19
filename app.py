@@ -82,8 +82,14 @@ weekly_ncd_sum = summary_df['Weekly NCD prediction_raw'].sum().round(2)
 new_df['Weekly CoNC prediction'] = new_df['Scrap wafer'] * new_df['CPW'] * new_df['Concentration Factor']
 new_df['Weekly CoNC prediction'] = new_df['Weekly CoNC prediction'].round(2).astype(str) + '%'
 
+# 建立顯示用的 DataFrame（CPW 顯示為整數）
+new_df_display = new_df.copy()
+new_df_display['CPW'] = new_df_display['CPW'].round().astype(int)
+
 # 顯示中間的 DataFrame
-st.dataframe(new_df[['DID', 'MPDW', 'DPW', 'CPW', 'Concentration Factor', 'Scrap wafer', 'Weekly NCD prediction', 'Weekly CoNC prediction']])
+st.subheader("Weekly NCD/CoNC Prediction")
+st.dataframe(new_df_display[['DID', 'MPDW', 'DPW', 'CPW', 'Concentration Factor', 'Scrap wafer', 'Weekly NCD prediction', 'Weekly CoNC prediction']])
+
 
 # 建立 sum row
 sum_row = {
@@ -114,6 +120,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw'])
 st.dataframe(display_df)
+
 
 
 
