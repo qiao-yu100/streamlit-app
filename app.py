@@ -95,7 +95,7 @@ new_df['Weekly CoNC prediction numeric'] = (
 new_df_display = new_df.copy()
 new_df_display['CPW'] = new_df_display['CPW'].round().astype(int)
 new_df_display['Weekly NCD prediction'] = new_df['Weekly NCD prediction numeric'].round(2).astype(str) + '%'
-new_df_display['Weekly CoNC prediction'] = new_df['Weekly CoNC prediction numeric'].round(2).astype(str) + '%'
+new_df_display['Weekly CoNC prediction'] = '$' + new_df['Weekly CoNC prediction numeric'].round(2).astype(str) 
 
 # 建立總和列
 sum_row = {
@@ -144,6 +144,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw','Scrap wafer'])
 st.dataframe(display_df)
+
 
 
 
