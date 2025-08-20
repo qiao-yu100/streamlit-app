@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # 讀取 Excel 檔案
-summary_df = pd.read_csv("summary_wip_prediction.csv")
+summary_df = pd.read_csv("summary_wip_prediction_FY26Q1.csv")
 
 # 設定頁面標題
 st.title("Baseline SQDR Calculator")
@@ -144,6 +144,7 @@ summary_df = pd.concat([summary_df, pd.DataFrame([sum_row])], ignore_index=True)
 st.subheader("Baseline SQDR NCD% Summary (4RA)")
 display_df = summary_df.drop(columns=['Weekly NCD prediction_raw','Scrap wafer'])
 st.dataframe(display_df)
+
 
 
 
